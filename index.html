@@ -35,7 +35,14 @@
                 <aside class="lg:col-span-1">
                     <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow">
                         <h2 class="font-bold text-lg mb-4">Cities</h2>
-                        <ul class="space-y-2">
+                        
+                        <!-- Search Form -->
+                        <div class="mb-4 relative">
+                            <span class="material-icons absolute left-3 top-3 text-gray-400 pointer-events-none">search</span>
+                            <input id="citySearch" type="text" placeholder="Search cities..." class="w-full pl-10 pr-4 py-2 rounded-lg border-2 border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition">
+                        </div>
+
+                        <ul id="cityList" class="space-y-2">
                             <li>
                                 <button class="city-btn w-full text-left px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold transition" data-city="Washington">
                                     <span class="material-icons text-sm align-middle inline mr-2">location_on</span>
@@ -341,6 +348,48 @@
                 e.target.closest('.city-btn').classList.add('bg-blue-500', 'text-white', 'font-semibold');
                 e.target.closest('.city-btn').classList.remove('hover:bg-gray-200', 'dark:hover:bg-gray-700');
                 updateWeather(e.target.closest('.city-btn').dataset.city);
+            });
+        });
+
+        // Live search functionality
+        const searchInput = document.getElementById('citySearch');
+        const cityList = document.getElementById('cityList');
+        const allCities = Array.from(cityList.querySelectorAll('.city-btn')).map(btn => ({
+            name: btn.dataset.city,
+            element: btn.closest('li')
+        }));
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+
+            allCities.forEach(city => {
+                const matches = city.name.toLowerCase().includes(searchTerm);
+                city.element.style.display = matches ? 'block' : 'none';
+            });
+
+            // Show "no results" message if needed
+            const visibleCount = allCities.filter(city => city.element.style.display !== 'none').length;
+            if (visibleCount === 0 && searchTerm) {
+                if (!document.getElementById('noResults')) {
+                    const noResults = document.createElement('li');
+                    noResults.id = 'noResults';
+                    noResults.className = 'text-center text-gray-500 py-4';
+                    noResults.textContent = 'No cities found';
+                    cityList.appendChild(noResults);
+                }
+            } else {
+                const noResults = document.getElementById('noResults');
+                if (noResults) noResults.remove();
+            }
+        });
+
+        // Clear search when clicking a city
+        document.querySelectorAll('.city-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                searchInput.value = '';
+                allCities.forEach(city => city.element.style.display = 'block');
+                const noResults = document.getElementById('noResults');
+                if (noResults) noResults.remove();
             });
         });
 
