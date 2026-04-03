@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Material+Icons&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <div class="min-h-screen">
+        <!-- Header with Theme Toggle -->
+        <header class="bg-blue-50 dark:bg-gray-800 shadow">
+            <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons text-3xl text-blue-600">cloud</span>
+                    <h1 class="text-2xl font-bold">WeatherHub</h1>
+                </div>
+                <button id="themeToggle" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                    <span id="themeIcon" class="material-icons">light_mode</span>
+                    <span id="themeText">Light</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-6xl mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Sidebar - City List -->
+                <aside class="lg:col-span-1">
+                    <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow">
+                        <h2 class="font-bold text-lg mb-4">Cities</h2>
+                        <ul class="space-y-2">
+                            <li>
+                                <button class="city-btn w-full text-left px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold transition" data-city="Washington">
+                                    <span class="material-icons text-sm align-middle inline mr-2">location_on</span>
+                                    Washington
+                                </button>
+                            </li>
+                            <li>
+                                <button class="city-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition" data-city="New York">
+                                    <span class="material-icons text-sm align-middle inline mr-2">location_on</span>
+                                    New York
+                                </button>
+                            </li>
+                            <li>
+                                <button class="city-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition" data-city="Los Angeles">
+                                    <span class="material-icons text-sm align-middle inline mr-2">location_on</span>
+                                    Los Angeles
+                                </button>
+                            </li>
+                            <li>
+                                <button class="city-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition" data-city="Chicago">
+                                    <span class="material-icons text-sm align-middle inline mr-2">location_on</span>
+                                    Chicago
+                                </button>
+                            </li>
+                            <li>
+                                <button class="city-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition" data-city="Houston">
+                                    <span class="material-icons text-sm align-middle inline mr-2">location_on</span>
+                                    Houston
+                                </button>
+                            </li>
+                            <li>
+                                <button class="city-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition" data-city="Phoenix">
+                                    <span class="material-icons text-sm align-middle inline mr-2">location_on</span>
+                                    Phoenix
+                                </button>
+                            </li>
+                            <li>
+                                <button class="city-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition" data-city="Miami">
+                                    <span class="material-icons text-sm align-middle inline mr-2">location_on</span>
+                                    Miami
+                                </button>
+                            </li>
+                            <li>
+                                <button class="city-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition" data-city="Seattle">
+                                    <span class="material-icons text-sm align-middle inline mr-2">location_on</span>
+                                    Seattle
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- Main Weather Widget -->
+                <section class="lg:col-span-3">
+                    <!-- Current Weather -->
+                    <div class="bg-gradient-to-br from-blue-400 to-blue-600 dark:from-blue-700 dark:to-blue-900 rounded-lg shadow-lg p-8 text-white mb-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h2 id="cityName" class="text-4xl font-bold">Washington</h2>
+                                <p id="weatherDescription" class="text-blue-100 mt-2">Partly Cloudy</p>
+                            </div>
+                            <span id="weatherIcon" class="material-icons text-7xl">wb_cloudy</span>
+                        </div>
+                        <div class="text-6xl font-bold mb-4" id="temperature">72°F</div>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-blue-100">Feels Like</p>
+                                <p id="feelsLike" class="text-2xl font-semibold">70°F</p>
+                            </div>
+                            <div>
+                                <p class="text-blue-100">Humidity</p>
+                                <p id="humidity" class="text-2xl font-semibold">65%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Weather Details -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-icons text-blue-500">air</span>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Wind Speed</p>
+                            </div>
+                            <p id="windSpeed" class="text-2xl font-bold">12 mph</p>
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-icons text-blue-500">compression</span>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Pressure</p>
+                            </div>
+                            <p id="pressure" class="text-2xl font-bold">1013 mb</p>
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-icons text-blue-500">visibility</span>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Visibility</p>
+                            </div>
+                            <p id="visibility" class="text-2xl font-bold">10 mi</p>
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-icons text-blue-500">water_drop</span>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">UV Index</p>
+                            </div>
+                            <p id="uvIndex" class="text-2xl font-bold">6</p>
+                        </div>
+                    </div>
+
+                    <!-- 5-Day Forecast -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-bold mb-4">5-Day Forecast</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow text-center">
+                                <p class="font-semibold mb-3">Today</p>
+                                <span class="material-icons text-4xl text-center block mb-3 justify-center">wb_sunny</span>
+                                <p class="font-bold">72°F</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Sunny</p>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow text-center">
+                                <p class="font-semibold mb-3">Tomorrow</p>
+                                <span class="material-icons text-4xl text-center block mb-3 justify-center">wb_cloudy</span>
+                                <p class="font-bold">70°F</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Cloudy</p>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow text-center">
+                                <p class="font-semibold mb-3">Thu</p>
+                                <span class="material-icons text-4xl text-center block mb-3 justify-center">grain</span>
+                                <p class="font-bold">65°F</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Rainy</p>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow text-center">
+                                <p class="font-semibold mb-3">Fri</p>
+                                <span class="material-icons text-4xl text-center block mb-3 justify-center">wb_cloudy</span>
+                                <p class="font-bold">68°F</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Cloudy</p>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow text-center">
+                                <p class="font-semibold mb-3">Sat</p>
+                                <span class="material-icons text-4xl text-center block mb-3 justify-center">wb_sunny</span>
+                                <p class="font-bold">75°F</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Sunny</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-100 dark:bg-gray-800 mt-12 py-6">
+            <div class="max-w-6xl mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
+                <p>Weather data for demonstration purposes</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Mock weather data for different cities
+        const weatherData = {
+            'Washington': {
+                temp: 72,
+                description: 'Partly Cloudy',
+                feelsLike: 70,
+                humidity: 65,
+                windSpeed: 12,
+                pressure: 1013,
+                visibility: 10,
+                uvIndex: 6,
+                icon: 'wb_cloudy'
+            },
+            'New York': {
+                temp: 68,
+                description: 'Rainy',
+                feelsLike: 66,
+                humidity: 78,
+                windSpeed: 18,
+                pressure: 1008,
+                visibility: 8,
+                uvIndex: 3,
+                icon: 'grain'
+            },
+            'Los Angeles': {
+                temp: 78,
+                description: 'Sunny',
+                feelsLike: 76,
+                humidity: 45,
+                windSpeed: 8,
+                pressure: 1015,
+                visibility: 15,
+                uvIndex: 8,
+                icon: 'wb_sunny'
+            },
+            'Chicago': {
+                temp: 62,
+                description: 'Cloudy',
+                feelsLike: 60,
+                humidity: 72,
+                windSpeed: 15,
+                pressure: 1010,
+                visibility: 9,
+                uvIndex: 4,
+                icon: 'wb_cloudy'
+            },
+            'Houston': {
+                temp: 80,
+                description: 'Humid & Sunny',
+                feelsLike: 85,
+                humidity: 70,
+                windSpeed: 10,
+                pressure: 1012,
+                visibility: 12,
+                uvIndex: 9,
+                icon: 'wb_sunny'
+            },
+            'Phoenix': {
+                temp: 95,
+                description: 'Hot & Sunny',
+                feelsLike: 98,
+                humidity: 20,
+                windSpeed: 14,
+                pressure: 1009,
+                visibility: 20,
+                uvIndex: 10,
+                icon: 'wb_sunny'
+            },
+            'Miami': {
+                temp: 82,
+                description: 'Humid & Partly Cloudy',
+                feelsLike: 88,
+                humidity: 75,
+                windSpeed: 12,
+                pressure: 1014,
+                visibility: 11,
+                uvIndex: 8,
+                icon: 'wb_cloudy'
+            },
+            'Seattle': {
+                temp: 58,
+                description: 'Rainy',
+                feelsLike: 56,
+                humidity: 85,
+                windSpeed: 20,
+                pressure: 1005,
+                visibility: 6,
+                uvIndex: 2,
+                icon: 'grain'
+            }
+        };
+
+        // Initialize theme
+        function initTheme() {
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                updateThemeButton(true);
+            }
+        }
+
+        // Update theme button
+        function updateThemeButton(isDark) {
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            if (isDark) {
+                themeIcon.textContent = 'dark_mode';
+                themeText.textContent = 'Dark';
+            } else {
+                themeIcon.textContent = 'light_mode';
+                themeText.textContent = 'Light';
+            }
+        }
+
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDark);
+            updateThemeButton(isDark);
+        });
+
+        // Update weather display
+        function updateWeather(city) {
+            const data = weatherData[city];
+            if (!data) return;
+
+            document.getElementById('cityName').textContent = city;
+            document.getElementById('temperature').textContent = `${data.temp}°F`;
+            document.getElementById('weatherDescription').textContent = data.description;
+            document.getElementById('weatherIcon').textContent = data.icon;
+            document.getElementById('feelsLike').textContent = `${data.feelsLike}°F`;
+            document.getElementById('humidity').textContent = `${data.humidity}%`;
+            document.getElementById('windSpeed').textContent = `${data.windSpeed} mph`;
+            document.getElementById('pressure').textContent = `${data.pressure} mb`;
+            document.getElementById('visibility').textContent = `${data.visibility} mi`;
+            document.getElementById('uvIndex').textContent = data.uvIndex;
+        }
+
+        // City button click handler
+        document.querySelectorAll('.city-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.city-btn').forEach(b => {
+                    b.classList.remove('bg-blue-500', 'text-white', 'font-semibold');
+                    b.classList.add('hover:bg-gray-200', 'dark:hover:bg-gray-700');
+                });
+                e.target.closest('.city-btn').classList.add('bg-blue-500', 'text-white', 'font-semibold');
+                e.target.closest('.city-btn').classList.remove('hover:bg-gray-200', 'dark:hover:bg-gray-700');
+                updateWeather(e.target.closest('.city-btn').dataset.city);
+            });
+        });
+
+        // Initialize
+        initTheme();
+        updateWeather('Washington');
+    </script>
+</body>
+</html>
